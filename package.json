@@ -1,11 +1,15 @@
 {
-  "name": "json2flux",
+  "name": "@tuxmart/json2flux",
   "version": "1.0.0",
   "description": "A tool for converting json to flux query",
   "main": "lib/index",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
   "repository": "tuxmart/json2flux",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
   "files": [
     "esm",
     "lib"
