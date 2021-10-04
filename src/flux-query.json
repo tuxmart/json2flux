@@ -1,0 +1,26 @@
+{
+  "bucket": "mainflux_1h",
+  "range": "-7d",
+  "filters": [
+    {
+      "key": "building",
+      "value": "mock-building",
+      "operator": "eq"
+    },
+    {
+      "key": "_measurement",
+      "value": "CO2",
+      "operator": "eq"
+    },
+    {
+      "key": "device",
+      "value": "Air-Quality-Sensor",
+      "operator": "eq"
+    },
+    {
+      "key": "_field",
+      "value": "value",
+      "operator": "eq"
+    }
+  ]
+}
