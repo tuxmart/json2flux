@@ -1,6 +1,6 @@
 {
   "name": "@tuxmart/json2flux",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tool for converting json to flux query",
   "main": "lib/index",
   "module": "esm/index.js",
