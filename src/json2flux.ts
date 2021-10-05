@@ -1,9 +1,9 @@
-import { map } from "lodash";
+import { map } from 'lodash';
 
 export interface FilterQuery {
   key: string;
   value: string;
-  operator: "eq" | "neq" | "gt" | "lt" | "ge" | "le";
+  operator: 'eq' | 'neq' | 'gt' | 'lt' | 'ge' | 'le';
 }
 
 export interface FluxJsonQuery {
@@ -22,18 +22,18 @@ export function filter({ key, value, operator }: FilterQuery): string {
 
 export function op(value: string): string {
   switch (value) {
-    case "eq":
-      return "==";
-    case "neq":
-      return "!=";
-    case "gt":
-      return ">";
-    case "ge":
-      return ">=";
-    case "lt":
-      return "<";
-    case "le":
-      return "<=";
+    case 'eq':
+      return '==';
+    case 'neq':
+      return '!=';
+    case 'gt':
+      return '>';
+    case 'ge':
+      return '>=';
+    case 'lt':
+      return '<';
+    case 'le':
+      return '<=';
     default:
       throw new Error(`unknown operator ${value}`);
   }
@@ -47,7 +47,7 @@ function json2flux(json: FluxJsonQuery): string {
   const _bucket = from(json.bucket);
   const _range = range(json.range);
   const _filters = map(json.filters, filter);
-  return [_bucket, _range, ..._filters].join("\n  |> ");
+  return [_bucket, _range, ..._filters].join('\n  |> ');
 }
 
 export default json2flux;
