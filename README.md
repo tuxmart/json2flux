@@ -1,12 +1,9 @@
 # json2flux
 A tool for converting json to flux query.
 
-
-## Getting startted
+## Getting started
 ```js
 import json2flux from '@tuxmart/json2flux';
-
-
 
 const jsonString = `
 {
