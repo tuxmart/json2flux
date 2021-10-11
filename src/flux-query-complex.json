@@ -1,0 +1,31 @@
+{
+  "bucket": "mainflux",
+  "range": {
+    "start": "v.timeRangeStart",
+    "stop": "v.timeRangeStop"
+  },
+  "filters": [
+    {
+      "key": "_measurement",
+      "value": "ActiveEnergyTotal",
+      "operator": "eq"
+    },
+    {
+      "key": "_field",
+      "value": "value",
+      "operator": "eq"
+    },
+    {
+      "key": "level",
+      "value": ["B1", "B2", "L10"],
+      "operator": "eq"
+    }
+  ],
+  "group": ["level"],
+  "aggregateWindow": {
+    "every": "2m",
+    "fn": "mean",
+    "createEmpty": false
+  },
+  "yield": "mean"
+}
