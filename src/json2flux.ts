@@ -1,15 +1,12 @@
-import { isArray, join, map } from 'lodash';
+import { isArray, join, map, omitBy, pickBy } from 'lodash';
 
-export interface FilterQuery {
-  key: string;
-  value: string | string[];
-  operator: 'eq' | 'neq' | 'gt' | 'lt' | 'ge' | 'le';
-}
+export const FLUX_FUNCTIONS = ['from', 'range', 'filter', 'group', 'aggregateWindow', 'yield'];
+export type FluxKeywords = 'from' | 'range' | 'filter' | 'group' | 'aggregateWindow' | 'yield';
+export type FilterQuery = Record<string, string | string[]>;
 
-export interface FluxJsonQuery {
-  bucket: string;
+export interface FluxJsonQuery extends Record<string, unknown> {
+  from: string;
   range: RangeOptions | string;
-  filters: FilterQuery[];
   group?: string[];
   aggregateWindow?: AggregateWindowOptions;
   yield?: string;
@@ -30,34 +27,15 @@ export function from(bucket: string): string {
   return `from(bucket: "${bucket}")`;
 }
 
-export function filter({ key, value, operator }: FilterQuery): string {
+export function filter(value: string | string[], key: string): string {
   if (isArray(value)) {
-    const conditions: string = join(
-      map(value, (_value) => `r["${key}"] ${op(operator)} "${_value}"`),
+    const conditions = join(
+      map(value, (_value) => `r["${key}"] == "${_value}"`),
       ' or ',
     );
     return `filter(fn: (r) => ${conditions})`;
   }
-  return `filter(fn: (r) => r["${key}"] ${op(operator)} "${value}")`;
-}
-
-export function op(value: string): string {
-  switch (value) {
-    case 'eq':
-      return '==';
-    case 'neq':
-      return '!=';
-    case 'gt':
-      return '>';
-    case 'ge':
-      return '>=';
-    case 'lt':
-      return '<';
-    case 'le':
-      return '<=';
-    default:
-      throw new Error(`unknown operator ${value}`);
-  }
+  return `filter(fn: (r) => r["${key}"] == "${value}")`;
 }
 
 export function range(options: RangeOptions | string): string {
@@ -81,15 +59,20 @@ function fluxYield(name: string) {
   return `yield(name: "${name}")`;
 }
 
+const accessor = (_, key) => FLUX_FUNCTIONS.includes(key);
+
 function json2flux(json: FluxJsonQuery): string {
+  const reserved = pickBy(json, accessor) as Record<FluxKeywords, unknown>;
+  const filters = omitBy(json, accessor) as FilterQuery;
+
   const result = [];
-  const _bucket = from(json.bucket);
-  const _range = range(json.range);
-  const _filters = map(json.filters, filter);
+  const _bucket = from(reserved.from as string);
+  const _range = range(reserved.range as RangeOptions);
+  const _filters = map(filters, filter);
   result.push(_bucket, _range, ..._filters);
 
   if (json.group) {
-    result.push(group(json.group));
+    result.push(group(reserved.group as string[]));
   }
 
   if (json.aggregateWindow) {
@@ -97,7 +80,7 @@ function json2flux(json: FluxJsonQuery): string {
   }
 
   if (json.yield) {
-    result.push(fluxYield(json.yield))
+    result.push(fluxYield(json.yield));
   }
 
   return result.join('\n  |> ');

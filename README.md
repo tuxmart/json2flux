@@ -1,42 +1,25 @@
 # json2flux
+
 A tool for converting json to flux query.
 
 ## Getting started
+
 ```js
 import json2flux from '@tuxmart/json2flux';
 
 const jsonString = `
 {
-  "bucket": "mainflux_1h",
+  "from": "mainflux_1h",
   "range": "-7d",
-  "filters": [
-    {
-      "key": "building",
-      "value": "mock-building",
-      "operator": "eq"
-    },
-    {
-      "key": "_measurement",
-      "value": "CO2",
-      "operator": "eq"
-    },
-    {
-      "key": "device",
-      "value": "Air-Quality-Sensor",
-      "operator": "eq"
-    },
-    {
-      "key": "_field",
-      "value": "value",
-      "operator": "eq"
-    }
-  ]
+  "building": "mock-building",
+  "_measurement": "CO2",
+  "device": "Air-Quality-Sensor",
+  "_field": "value"
 }
 `;
 
 json2flux(jsonString);
 ```
-
 
 It will be converted into influx query.
 

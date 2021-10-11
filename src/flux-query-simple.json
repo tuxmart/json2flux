@@ -1,9 +1,6 @@
 {
   "from": "mainflux",
-  "range": {
-    "start": "v.timeRangeStart",
-    "stop": "v.timeRangeStop"
-  },
+  "range": "-7d",
   "_measurement": "ActiveEnergyTotal",
   "_field": "value",
   "level": ["B1", "B2", "L10"],
