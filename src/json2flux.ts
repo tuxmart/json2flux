@@ -14,7 +14,7 @@ export interface FluxJsonQuery extends Record<string, unknown> {
 
 export interface AggregateWindowOptions {
   every: string;
-  fn: 'mean' | 'sum';
+  fn: 'mean' | 'sum' | 'last' | 'min' | 'max';
   createEmpty: boolean;
 }
 
