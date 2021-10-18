@@ -23,6 +23,8 @@ jobs:
         run: |
           yarn
           yarn build
+      - name: Run test
+        run: yarn test
       - name: Publish Package
         run: npm publish
         env:
